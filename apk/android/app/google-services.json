@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "106733292389",
+    "project_id": "zarzadzanie-promocjami",
+    "storage_bucket": "zarzadzanie-promocjami.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:106733292389:android:23a794eb08d97c69b7af8c",
+        "android_client_info": {
+          "package_name": "com.example.aplikacja_do_promocji_bankowych"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "106733292389-ipd176ti372os7qas3u6lem3kkh1cq4h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVDy3SMyKNJueExjxt_N6xurj5ByGPIpM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "106733292389-ipd176ti372os7qas3u6lem3kkh1cq4h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
