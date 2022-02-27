@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
+
 class KarencjaScreen extends StatefulWidget {
   @override
   _KarencjaScreen createState() => _KarencjaScreen();
@@ -98,6 +100,7 @@ class _KarencjaScreen extends State<KarencjaScreen> {
                                 if (_formKey.currentState.validate()) {
                                   _formKey.currentState.save();
                                 }
+                                Navigator.of(context).pop();
                               },
                             ),
                           )

@@ -39,6 +39,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
+import 'inny_detal_screeen.dart';
+
 class MojePromocjeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,9 @@ class MojePromocjeScreen extends StatelessWidget {
         FirebaseFirestore.instance.collection('promocje').get();
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('Moje promocje'),
+      ),
       body: FutureBuilder<QuerySnapshot>(
         future: users,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -60,27 +64,36 @@ class MojePromocjeScreen extends StatelessWidget {
                 children: documents.map((doc) {
               DateTime dataZakonczenia = doc['Data zakonczenia'].toDate();
               String stringData = DateFormat('yMd').format(dataZakonczenia);
-              return Card(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        leading: Container(
-                          width: 80,
-                          child: Container(
-                            child: Image.network(doc['Zdjęcie']),
-                            // fit: BoxFit.fill,
+              return doc['ide'] == '1'
+                  ? SizedBox()
+                  : GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InnyDetalScreen()),
+                      ),
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                leading: Container(
+                                  width: 80,
+                                  child: Container(
+                                    child: Image.network(doc['Zdjęcie']),
+                                    // fit: BoxFit.fill,
+                                  ),
+                                ),
+                                title: Text(doc['Tytul']),
+                                subtitle: Text(stringData),
+                              ),
+                            ],
                           ),
                         ),
-                        title: Text(doc['Tytul']),
-                        subtitle: Text(stringData),
                       ),
-                    ],
-                  ),
-                ),
-              );
+                    );
             }).toList());
           }
 
