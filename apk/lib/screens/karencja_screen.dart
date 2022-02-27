@@ -17,16 +17,12 @@ class _KarencjaScreen extends State<KarencjaScreen> {
       ),
       body: Container(
         child: Center(
-          // Use future builder and DefaultAssetBundle to load the local JSON file
           child: FutureBuilder(
               future: DefaultAssetBundle.of(context)
                   .loadString('assets/karencja.json'),
               builder: (context, snapshot) {
-                // Decode the JSON
                 var new_data = json.decode(snapshot.data.toString());
-
                 return ListView.builder(
-                  // Build the ListView
                   itemBuilder: (BuildContext context, int index) {
                     return Card(
                       child: Padding(
@@ -34,7 +30,23 @@ class _KarencjaScreen extends State<KarencjaScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            Text("Nazwa Banku: " + new_data[index]['name']),
+                            RichText(
+                              text: TextSpan(
+                                style: const TextStyle(
+                                  fontSize: 18.0,
+                                  color: Colors.black,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(text: 'Nazwa Banku: '),
+                                  TextSpan(
+                                      text: new_data[index]['name'],
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                            ),
+                            // Text("Nazwa Banku: " + new_data[index]['name']),
+                            // Text("cos"),
                             SizedBox(
                               height: 10,
                             ),
@@ -57,21 +69,8 @@ class _KarencjaScreen extends State<KarencjaScreen> {
             builder: (BuildContext context) {
               return AlertDialog(
                 content: Stack(
-                  overflow: Overflow.visible,
+                  clipBehavior: Clip.none,
                   children: <Widget>[
-                    Positioned(
-                      right: -40.0,
-                      top: -40.0,
-                      child: InkResponse(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: CircleAvatar(
-                          child: Icon(Icons.close),
-                          backgroundColor: Colors.blue,
-                        ),
-                      ),
-                    ),
                     Form(
                       key: _formKey,
                       child: Column(
@@ -93,7 +92,7 @@ class _KarencjaScreen extends State<KarencjaScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: RaisedButton(
+                            child: TextButton(
                               child: Text("Dodaj"),
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
