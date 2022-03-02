@@ -1,5 +1,5 @@
+import 'package:aplikacja_do_promocji_bankowych/screens/pin_screen.dart';
 import 'package:flutter/material.dart';
-import './screens/prom_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PromScreen(),
+      home: PinScreen(),
     );
   }
 }
