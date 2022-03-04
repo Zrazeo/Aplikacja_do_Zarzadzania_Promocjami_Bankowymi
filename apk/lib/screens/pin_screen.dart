@@ -1,5 +1,11 @@
 import 'package:aplikacja_do_promocji_bankowych/screens/prom_screen.dart';
 import 'package:flutter/material.dart';
+import 'dart:async' show Future;
+import 'package:flutter/services.dart' show rootBundle;
+
+Future<String> loadAsset() async {
+  return await rootBundle.loadString('assets/pin.txt');
+}
 
 class PinScreen extends StatefulWidget {
   @override
@@ -7,7 +13,16 @@ class PinScreen extends StatefulWidget {
 }
 
 class _PinScreenState extends State<PinScreen> {
-  final String _pin = '2541';
+  String _pin = '';
+  fetchFileData() async {
+    String responseText;
+    responseText = await rootBundle.loadString('assets/pin.txt');
+    setState(() {
+      _pin = responseText;
+    });
+    print('c');
+  }
+
   int firstOnPin = -1;
   int secondOnPin = -1;
   int thirdOnPin = -1;
@@ -161,7 +176,7 @@ class _PinScreenState extends State<PinScreen> {
       padding: const EdgeInsets.all(10.0),
       child: ElevatedButton(
         onPressed: () => number == '-1'
-            ? _deleteNumberOnPin()
+            ? fetchFileData() //_deleteNumberOnPin()
             : _setNumber(int.parse(number)),
         style: ElevatedButton.styleFrom(
           primary: int.parse(number) >= 0 ? Colors.white : Colors.black12,
