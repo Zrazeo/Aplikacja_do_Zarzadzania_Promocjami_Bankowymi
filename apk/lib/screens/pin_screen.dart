@@ -20,7 +20,7 @@ class _PinScreenState extends State<PinScreen> {
     setState(() {
       _pin = responseText;
     });
-    print('c');
+    print(_pin);
   }
 
   int firstOnPin = -1;
@@ -175,9 +175,14 @@ class _PinScreenState extends State<PinScreen> {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: ElevatedButton(
-        onPressed: () => number == '-1'
-            ? fetchFileData() //_deleteNumberOnPin()
-            : _setNumber(int.parse(number)),
+        onPressed: () {
+          if (number == '-1') {
+            _deleteNumberOnPin();
+          } else {
+            _setNumber(int.parse(number));
+            fetchFileData();
+          }
+        },
         style: ElevatedButton.styleFrom(
           primary: int.parse(number) >= 0 ? Colors.white : Colors.black12,
           elevation: 1,
