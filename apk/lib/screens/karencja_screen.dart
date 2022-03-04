@@ -20,11 +20,7 @@ class _KarencjaScreen extends State<KarencjaScreen> {
   @override
   Widget build(BuildContext context) {
     void deleteKarencja(Karencja karencja) {
-      // final box = Boxes.getkarencja();
-      // box.delete(karencja.key);
-
       karencja.delete();
-      //setState(() => karencja.remove(karencja));
     }
 
     void editKarencja(
@@ -35,9 +31,6 @@ class _KarencjaScreen extends State<KarencjaScreen> {
       karencja.nazwa = nazwa;
       karencja.data = data;
 
-      // final box = Boxes.getkarencja();
-      // box.put(karencja.key, karencja);
-
       karencja.save();
     }
 
@@ -45,7 +38,7 @@ class _KarencjaScreen extends State<KarencjaScreen> {
           children: [
             Expanded(
               child: TextButton.icon(
-                label: Text('Edit'),
+                label: Text('Edytuj'),
                 icon: Icon(Icons.edit),
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
@@ -67,7 +60,7 @@ class _KarencjaScreen extends State<KarencjaScreen> {
             ),
             Expanded(
               child: TextButton.icon(
-                label: Text('Delete'),
+                label: Text('Usuń'),
                 icon: Icon(Icons.delete),
                 onPressed: () => deleteKarencja(karencja),
               ),
@@ -95,7 +88,6 @@ class _KarencjaScreen extends State<KarencjaScreen> {
       Karencja karencja,
     ) {
       final data = karencja.data;
-      final nazwa = karencja.nazwa;
 
       return Card(
         color: Colors.white,
@@ -106,7 +98,7 @@ class _KarencjaScreen extends State<KarencjaScreen> {
             maxLines: 2,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
-          subtitle: Text(nazwa),
+          subtitle: Text(data),
           trailing: Text(
             data,
             style: TextStyle(
@@ -123,7 +115,7 @@ class _KarencjaScreen extends State<KarencjaScreen> {
       if (karencja.isEmpty) {
         return Center(
           child: Text(
-            'No expenses yet!',
+            'Brak zamkniętych kont',
             style: TextStyle(fontSize: 24),
           ),
         );

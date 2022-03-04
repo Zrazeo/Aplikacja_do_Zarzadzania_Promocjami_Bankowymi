@@ -31,7 +31,7 @@ class _KarencjaDialogState extends State<KarencjaDialog> {
       final karencja = widget.karencja;
 
       nazwa.text = karencja.nazwa;
-      data.text = karencja.data.toString();
+      data.text = karencja.data;
     }
   }
 
@@ -46,7 +46,9 @@ class _KarencjaDialogState extends State<KarencjaDialog> {
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.karencja != null;
-    final title = isEditing ? 'Edytuj' : 'Dodaj';
+    final title = isEditing
+        ? 'Edytuj date zamknięcia konta'
+        : 'Dodaj adnotacje o zamknięciu konta';
 
     return AlertDialog(
       title: Text(title),
@@ -80,17 +82,17 @@ class _KarencjaDialogState extends State<KarencjaDialog> {
         validator: (name) =>
             name != null && name.isEmpty ? 'Wpisz nazwe banku' : null,
       );
-        
+
   Widget buildDate() => TextFormField(
-        controller: nazwa,
+        controller: data,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
           hintText: 'Wpisz date zakończenia umowy',
         ),
-        validator: (name) =>
-            name != null && name.isEmpty ? 'Wpisz date zakończenia umowy' : null,
+        validator: (data) => data != null && data.isEmpty
+            ? 'Wpisz date zakończenia umowy'
+            : null,
       );
-
 
   Widget buildCancelButton(BuildContext context) => TextButton(
         child: Text('Anuluj'),
