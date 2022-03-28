@@ -35,11 +35,10 @@
 //   }
 // }
 
+import 'package:aplikacja_do_promocji_bankowych/screens/detale_prom_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-
-import 'inny_detal_screeen.dart';
 
 class MojePromocjeScreen extends StatelessWidget {
   @override
@@ -70,7 +69,7 @@ class MojePromocjeScreen extends StatelessWidget {
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => InnyDetalScreen()),
+                            builder: (context) => DetaleScreen(doc)),
                       ),
                       child: Card(
                         child: Padding(

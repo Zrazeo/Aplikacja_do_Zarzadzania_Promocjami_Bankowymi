@@ -19,9 +19,24 @@ class KarencjaDialog extends StatefulWidget {
 class _KarencjaDialogState extends State<KarencjaDialog> {
   final formKey = GlobalKey<FormState>();
   final nazwa = TextEditingController();
-  final data = TextEditingController();
+  String data = DateTime.now().toIso8601String().substring(0, 10);
 
   bool isExpense = true;
+  bool chooseDate = false;
+  DateTime selectedDate = DateTime.now();
+
+  _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2019),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
 
   @override
   void initState() {
@@ -31,14 +46,14 @@ class _KarencjaDialogState extends State<KarencjaDialog> {
       final karencja = widget.karencja;
 
       nazwa.text = karencja.nazwa;
-      data.text = karencja.data;
+      data = karencja.data;
     }
   }
 
   @override
   void dispose() {
     nazwa.dispose();
-    data.dispose();
+    // data.dispose();
 
     super.dispose();
   }
@@ -83,15 +98,43 @@ class _KarencjaDialogState extends State<KarencjaDialog> {
             name != null && name.isEmpty ? 'Wpisz nazwe banku' : null,
       );
 
-  Widget buildDate() => TextFormField(
-        controller: data,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          hintText: 'Wpisz date zakończenia umowy',
+  Widget buildDate() => GestureDetector(
+        onTap: () {
+          setState(() {
+            chooseDate = !chooseDate;
+            // data = selectedDate.toIso8601String().substring(0, 10);
+          });
+          _selectDate(context);
+        },
+        child: Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black38),
+            borderRadius: BorderRadius.circular(3),
+          ),
+          height: 60,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: !chooseDate
+                ? Text(
+                    'Wybierz date',
+                    style: TextStyle(color: Colors.black54),
+                  )
+                : Text(
+                    selectedDate.toIso8601String().substring(0, 10),
+                  ),
+          ),
         ),
-        validator: (data) => data != null && data.isEmpty
-            ? 'Wpisz date zakończenia umowy'
-            : null,
+        // TextFormField(
+        //   controller: data,
+        //   decoration: InputDecoration(
+        //     border: OutlineInputBorder(),
+        //     hintText: 'Wpisz date zakończenia umowy',
+        //   ),
+        //   validator: (data) => data != null && data.isEmpty
+        //       ? 'Wpisz date zakończenia umowy'
+        //       : null,
+        // ),
       );
 
   Widget buildCancelButton(BuildContext context) => TextButton(
@@ -109,9 +152,9 @@ class _KarencjaDialogState extends State<KarencjaDialog> {
 
         if (isValid) {
           final name = nazwa.text;
-          final data1 = data.text;
-
-          widget.onClickedDone(name, data1);
+          // final data1 = data.text;
+          data = selectedDate.toIso8601String().substring(0, 10);
+          widget.onClickedDone(name, data);
 
           Navigator.of(context).pop();
         }

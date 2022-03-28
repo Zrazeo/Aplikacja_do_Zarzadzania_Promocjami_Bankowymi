@@ -114,7 +114,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:aplikacja_do_promocji_bankowych/widget/drawer.dart';
 import 'package:aplikacja_do_promocji_bankowych/screens/detale_prom_screen.dart';
-import 'package:aplikacja_do_promocji_bankowych/screens/inny_detal_screeen.dart';
+
 
 class PromScreen extends StatelessWidget {
   @override
@@ -151,9 +151,12 @@ class PromScreen extends StatelessWidget {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => doc['ide'] == '1'
-                                  ? DetaleScreen()
-                                  : InnyDetalScreen()),
+                              builder: (context) => 
+                              // doc['ide'] == '1'
+                                  // ?
+                                  DetaleScreen(doc)
+                                  // : InnyDetalScreen()
+                                  ),
                         ),
                         child: ListTile(
                           leading: Container(
