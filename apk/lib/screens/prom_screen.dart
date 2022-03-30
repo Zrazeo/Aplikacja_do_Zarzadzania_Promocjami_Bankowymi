@@ -127,7 +127,7 @@ class PromScreen extends StatelessWidget {
         centerTitle: true,
         title: const Text('Promocje'),
       ),
-      drawer: drawer(),
+      drawer: Panel(),
       body: FutureBuilder<QuerySnapshot>(
         future: users,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

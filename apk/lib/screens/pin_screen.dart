@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:aplikacja_do_promocji_bankowych/screens/prom_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:async' show Future;
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:path_provider/path_provider.dart';
 
 Future<String> loadAsset() async {
   return await rootBundle.loadString('assets/pin.txt');
@@ -20,7 +23,70 @@ class _PinScreenState extends State<PinScreen> {
     setState(() {
       _pin = responseText;
     });
-    print(_pin);
+    // print(_pin);
+  }
+
+  Future<String> get _localPath async {
+    var directory = await getExternalStorageDirectory();
+    directory ??= await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/pin.txt');
+  }
+
+  Future<File> write(String data) async {
+    final file = await _localFile;
+    // Write the file in append mode so it would append the data to existing file
+    // if it already exists
+    return file.writeAsString('$data\n');
+  }
+
+  Future<String> readData() async {
+    try {
+      final file = await _localFile;
+      if (!File('$file').existsSync()) {
+        write('0000');
+      }
+      String body = await file.readAsString();
+      print(body);
+      // final regex = RegExp(r'^\d{4}$');
+      // print(body.length);
+      // if (!regex.hasMatch(body.substring(0, 4)) && body.length != 4) {
+      if (body.length != 5 || body.substring(0, 4) == '0000') {
+        _pin = '0000';
+        _showDialog();
+      } else {
+        _pin = body;
+      }
+      print(_pin);
+      // _pin = '1111';
+      return body;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  void initState() {
+    super.initState();
+    // fetchFileData();
+    readData();
+    // _showDialog();
+  }
+
+  _showDialog() async {
+    await Future.delayed(Duration(milliseconds: 50));
+    // print(_pin);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text(
+            'Twój tymczasowy pin to 0-0-0-0. Zmień go po wejściu do aplikacji!'),
+        duration: Duration(seconds: 15),
+      ),
+    );
   }
 
   int firstOnPin = -1;
@@ -43,6 +109,7 @@ class _PinScreenState extends State<PinScreen> {
         fourthOnPin = number;
       }
     });
+    print('$firstOnPin $secondOnPin $thirdOnPin $fourthOnPin');
   }
 
   void _checkPin() {
@@ -66,11 +133,11 @@ class _PinScreenState extends State<PinScreen> {
 
   void _deleteNumberOnPin() {
     setState(() {
-      if (fourthOnPin > 0) {
+      if (fourthOnPin >= 0) {
         fourthOnPin = -1;
-      } else if (fourthOnPin < 0 && thirdOnPin > 0) {
+      } else if (fourthOnPin < 0 && thirdOnPin >= 0) {
         thirdOnPin = -1;
-      } else if (thirdOnPin < 0 && secondOnPin > 0) {
+      } else if (thirdOnPin < 0 && secondOnPin >= 0) {
         secondOnPin = -1;
       } else if (secondOnPin < 0) {
         firstOnPin = -1;
@@ -162,7 +229,7 @@ class _PinScreenState extends State<PinScreen> {
           width: 20,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: number > 0 ? Colors.black26 : Colors.transparent,
+            color: number >= 0 ? Colors.black26 : Colors.transparent,
             border: Border.all(
               color: Colors.black12,
               width: 2,
@@ -180,7 +247,7 @@ class _PinScreenState extends State<PinScreen> {
             _deleteNumberOnPin();
           } else {
             _setNumber(int.parse(number));
-            fetchFileData();
+            // fetchFileData();
           }
         },
         style: ElevatedButton.styleFrom(

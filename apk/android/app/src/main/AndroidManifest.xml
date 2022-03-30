@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.aplikacja_do_promocji_bankowych">
+   <uses-permission android:name="android.permission.INTERNET" />
+   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
    <application
         android:label="aplikacja_do_promocji_bankowych"
         android:icon="@mipmap/ic_launcher">

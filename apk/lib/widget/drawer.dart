@@ -5,10 +5,30 @@ import 'package:aplikacja_do_promocji_bankowych/screens/stat_screen.dart';
 import 'package:aplikacja_do_promocji_bankowych/screens/karencja_screen.dart';
 import 'package:aplikacja_do_promocji_bankowych/screens/moje_promki_screen.dart';
 
-class drawer extends StatelessWidget {
-  const drawer({
-    Key key,
-  }) : super(key: key);
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
+
+class Panel extends StatefulWidget {
+  @override
+  State<Panel> createState() => _PanelState();
+}
+
+class _PanelState extends State<Panel> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +89,92 @@ class drawer extends StatelessWidget {
               );
             },
           ),
+          ListTile(
+            leading: Icon(Icons.vpn_key),
+            title: Text('Zmiana kodu PIN'),
+            onTap: () async {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('Ustaw nowy pin'),
+                  content: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextFormField(
+                          keyboardType: TextInputType.number,
+                          maxLength: 4,
+                          autofocus: true,
+                          controller: controller,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Pin nie może być pusty!';
+                            } else if (value.length < 4) {
+                              return 'Pin musi mieć 4 cyfry!';
+                            } else if (!RegExp(r'^\d{4}$').hasMatch(value)) {
+                              return 'Pin może zawierać tylko cyfry!';
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              if (_formKey.currentState.validate()) {
+                                submit();
+                              }
+                            },
+                            child: Text('Zmień')),
+                      ],
+                    ),
+                  ),
+                  // actions: [
+                  //   TextButton(onPressed: submit, child: Text('Zmień'))
+                  // ],
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
+  }
+
+  Future<String> get _localPath async {
+    var directory = await getExternalStorageDirectory();
+    directory ??= await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/pin.txt');
+  }
+
+  Future<File> write(String data) async {
+    final file = await _localFile;
+    // Write the file in append mode so it would append the data to existing file
+    // if it already exists
+    return file.writeAsString('$data\n');
+  }
+
+  Future<String> readData() async {
+    try {
+      final file = await _localFile;
+      String body = await file.readAsString();
+      print(body);
+      return body;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  void submit() {
+    Navigator.of(context).pop(controller.text);
+    write(controller.text);
+    readData();
+
+    controller.text = '';
   }
 }
