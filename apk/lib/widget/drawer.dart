@@ -1,3 +1,4 @@
+import 'package:aplikacja_do_promocji_bankowych/screens/wymogi_testowe.dart';
 import 'package:flutter/material.dart';
 
 import 'package:aplikacja_do_promocji_bankowych/screens/wymogi_screen.dart';
@@ -85,7 +86,7 @@ class _PanelState extends State<Panel> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => WymogiScreen()),
+                MaterialPageRoute(builder: (context) => WymogiTestowe()),
               );
             },
           ),

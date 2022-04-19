@@ -10,7 +10,9 @@ void main() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(KarencjaAdapter());
-  await Hive.openBox<Karencja>('karencja');
+  Hive.registerAdapter(MyFavoriteAdapter());
+  // await Hive.openBox<Karencja>('karencja');
+  // await Hive.openBox<MyFavorite>('myFavorite');
 
   await Firebase.initializeApp();
   runApp(MyApp());

@@ -12,7 +12,7 @@ class KarencjaScreen extends StatefulWidget {
 class _KarencjaScreen extends State<KarencjaScreen> {
   @override
   void dispose() {
-    Hive.box('karencja').close();
+    Hive.box<Karencja>('karencja').close();
 
     super.dispose();
   }
@@ -144,14 +144,26 @@ class _KarencjaScreen extends State<KarencjaScreen> {
         centerTitle: true,
         title: const Text('Karencja'),
       ),
-      body: ValueListenableBuilder<Box<Karencja>>(
-        valueListenable: Boxes.getKarencja().listenable(),
-        builder: (context, box, _) {
-          final karencja = box.values.toList().cast<Karencja>();
+      body: FutureBuilder(
+          future: Hive.openBox<Karencja>('karencja'),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              } else {
+                return ValueListenableBuilder<Box<Karencja>>(
+                  valueListenable: Boxes.getKarencja().listenable(),
+                  builder: (context, box, _) {
+                    final karencja = box.values.toList().cast<Karencja>();
 
-          return buildContent(karencja);
-        },
-      ),
+                    return buildContent(karencja);
+                  },
+                );
+              }
+            } else {
+              return const SizedBox();
+            }
+          }),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => showDialog(
